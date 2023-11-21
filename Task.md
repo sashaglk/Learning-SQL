@@ -19,7 +19,7 @@ Select the books with the title containing the word "and" whose author has the n
 ``SELECT *``  
 ``FROM Books``  
 ``WHERE title LIKE '%and%'``  
-``    AND author BETWEEN 'J%' AND 'R%'``  
+``    AND (author LIKE 'J%' OR author LIKE 'R%')``  
 ``    AND year > 2000;``  
 
 ## **Task 3**:  
@@ -44,7 +44,7 @@ Write the same query as in Task 2 on this DB scheme.
 ``JOIN Authors a``  
 ``    ON b.author_id = a.id``  
 ``WHERE b.title LIKE '%and%'``   
-``    AND a.name BETWEEN 'J%' AND 'R%'``  
+``    AND (a.name LIKE 'J%' OR a.name LIKE 'R%')``  
 ``    AND b.year > 2000;``  
 
 ## **Task 4**:  
@@ -55,7 +55,7 @@ Write a query, the same as in Task 3, but it should result in a single cell with
 ``JOIN Authors a``  
 ``    ON b.author_id = a.id``  
 ``WHERE b.title LIKE '%and%'``  
-``    AND a.name BETWEEN 'J%' AND 'R%'``  
+``    AND (a.name LIKE 'J%' OR a.name LIKE 'R%')``  
 ``    AND b.year > 2000;``  
 
 ## **Task 5**:  
@@ -82,20 +82,22 @@ Add at least one new record to both tables:
 ## **Task 7**:  
 Remove all the books from Books table written by Tuve Jansson.  
 
-``DELETE b``  
-``FROM Books b``  
-``JOIN Authors a``  
-``    ON b.author_id = a.id``  
-``WHERE a.name = 'Tuve'``  
-``    AND a.surname = 'Jansson';``  
+``DELETE FROM Books``  
+``WHERE author_id = (``  
+``    SELECT id``  
+``    FROM Authors``  
+``    WHERE name = 'Tuve'``  
+``        AND surname = 'Jansson';``  
+``);``  
 
 ## **Task 8**:  
 Update all titles of books by Tuve Jansson to "Mumintroll Saga".  
 
-``UPDATE b``  
-``SET b.title = 'Mumintroll Saga'``  
-``FROM Books b``  
-``JOIN Authors a``  
-``    ON b.author_id = a.id``  
-``WHERE a.name = 'Tuve'``  
-``    AND a.surname = 'Jansson';``  
+``UPDATE Books``  
+``SET title = 'Mumintroll Saga'``  
+``WHERE author_id = (``  
+``    SELECT id``  
+``    FROM Authors``  
+``    WHERE name = 'Tuve'``  
+``        AND surname = 'Jansson';``  
+``);`` 
